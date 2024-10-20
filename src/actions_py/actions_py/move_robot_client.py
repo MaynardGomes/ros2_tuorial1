@@ -4,11 +4,19 @@ from rclpy.node import Node
 from rclpy.action import ActionClient
 from rclpy.action.client import ClientGoalHandle, GoalStatus 
 from my_robot_interfaces.action import MoveRobot
+from example_interfaces.msg import Empty
 
 class MoveRobotClientNode(Node): 
     def __init__(self):
         super().__init__("move_robot_client") 
+        self.goal_handle_ = None
         self.move_robot_client_ = ActionClient(self, MoveRobot, "move_robot")
+        self.cancel_goal_subscriber_ = self.create_subscription(
+            Empty, "cancel_goal", self.callback_cancel_goal, 10)
+        
+    def callback_cancel_goal(self, msg):
+        self.get_logger().info("Received msg on cancel goal topic")
+        self.cancel_goal()
 
     def send_goal(self, position, velocity):
         #Wait for the server
@@ -26,11 +34,10 @@ class MoveRobotClientNode(Node):
                 add_done_callback(self.goal_response_callback)
         
 
-
     def cancel_goal(self):
-        self.get_logger().info("Send cancel request")
-        self.goal_handle_.cancel_goal_async()
-   
+        if self.goal_handle_ is not None:
+            self.get_logger().info("Send cancel request")
+            self.goal_handle_.cancel_goal_async()
 
     def goal_response_callback(self, future):
         self.goal_handle_ : ClientGoalHandle = future.result()
@@ -60,7 +67,7 @@ class MoveRobotClientNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = MoveRobotClientNode() 
-    node.send_goal(76, 7)
+    node.send_goal(76, 1)
     rclpy.spin(node)
     rclpy.shutdown()
 
