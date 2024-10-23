@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'lifecycle_py'
+package_name = 'executors_py'
 
 setup(
     name=package_name,
@@ -13,18 +13,15 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ed',
-    maintainer_email='todo.todo@todo.com',
+    maintainer='maynard',
+    maintainer_email='maynardgomes.mg14@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "number_publisher = lifecycle_py.number_publisher:main",
-            "lifecycle_node_manager = lifecycle_py.lifecycle_node_manager:main",
-            "move_robot_server = lifecycle_py.move_robot_server:main",
-            "move_robot_startup = lifecycle_py.move_robot_startup:main"
-
+            "single_threaded_executor = executors_py.single_threaded_executor:main",
+            "multi_threaded_executor = executors_py.multi_threaded_executor:main"
         ],
     },
 )
