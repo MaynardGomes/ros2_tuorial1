@@ -1,0 +1,10 @@
+<launch>    
+    <set_env name="TURTLEBOT3_MODEL" value="waffle" />
+    <include file="$(find-pkg-share turtlebot3_gazebo)/launch/empty_world.launch.py" />
+
+    <node pkg="final_project" exec="turtlebot_controller" name="turtle_controller_1" />
+   
+     <node pkg="lifecycle_py" exec="lifecycle_node_manager">
+        <param name="managed_node_name" value="turtle_controller_1" />
+    </node>
+</launch>
